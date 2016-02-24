@@ -1,0 +1,43 @@
+---
+- model: Impreza
+  type: car
+  manufacturer:
+    name: Subaru
+    country: Japan
+  available_colors:
+  - blue
+  - red
+  - black
+- model: Legacy
+  type: car
+  manufacturer:
+    name: Subaru
+    country: Japan
+  available_colors:
+  - blue
+  - silver
+  - black
+- model: Outback
+  type: wagon
+  manufacturer:
+    name: Subaru
+    country: Japan
+  available_colors:
+  - green
+- model: Fiesta
+  type: car
+  manufacturer:
+    name: Ford
+    country: USA
+  available_colors:
+  - blue
+  - silver
+  - red
+- model: F-150
+  type: truck
+  manufacturer:
+    name: Ford
+    country: USA
+  available_colors:
+  - silver
+  - black

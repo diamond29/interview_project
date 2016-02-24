@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+require 'sinatra'
+require 'sinatra/json'
+require_relative 'setup_req'
+require 'interview_project'
+
+cars = default_cars
+
+get '/api/cars' do
+  json cars
+end
