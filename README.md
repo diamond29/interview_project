@@ -3,13 +3,13 @@
 
 A little project for an interview. Set up a webserver that sends some information to a client, client stores some information in a postgresql relational database and prints output.
 
-Requires
+### Requires
 
 1. Postgresql service running on default port 5432 with the "postgres" user being able to create databases. If you don't have one running, you can run the postgres docker container with `bin/run_docker_postgres`
 
 2. Ruby - tested with version 2.3.0 but might work with others
 
-Running the code
+### Running the code
 
 ```
 # Create the database
@@ -27,3 +27,8 @@ bundle exec bin/server
 # run the client:
 bundle exec bin/client
 ```
+
+### Why I chose the language/frameworks/tools
+I chose ruby because it's my favorite language for getting stuff done and lets me be the most expressive. Other languages I've used before like c++, java, c# would have all taken a lot longer and the result would have been more verbose.
+
+I chose to actually use a postgres service because it was the easiest way for me to verify my solution. I also wanted to try writing some raw SQL instead of using ActiveRecord, which is the only sql interface I've used for ruby so far. I used rspec because I wanted an easy way of verifying all the pieces of my code. Bundler, rake, travis,git etc were all standard ways of solving standard problems with ruby/github (CI, dependency management, driving tasks/task dependencies).
