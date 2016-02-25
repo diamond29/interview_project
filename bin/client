@@ -127,7 +127,7 @@ def make_answers
   query = "SELECT (m.manufacturer_name, count(color_name)) FROM\n" \
             "cars c JOIN manufacturers m ON c.manufacturer_name=m.manufacturer_name\n" \
             "JOIN cars_colors ON c.car_model=cars_colors.car_model WHERE cars_colors.color_name='blue'\n" \
-            "GROUP BY m.manufacturer_name"
+            'GROUP BY m.manufacturer_name'
 
   SQLWrapper::DB[query].each do |row|
     puts row
