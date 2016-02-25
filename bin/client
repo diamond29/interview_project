@@ -1,142 +1,18 @@
 #!/usr/bin/env ruby
 
-require 'net/http'
-require 'uri'
-require 'json'
-require 'sequel'
 require_relative 'setup_req'
+require 'interview_project/simple_api_client'
+require 'interview_project/sql_wrapper'
 
-HOST = 'localhost:4567'
+interview_sql_client = InterviewProject::SQLWrapper.new
 
-# something
-class SimpleAPIClient
-  def make_request
-    url = URI.parse("http://#{HOST}/api/cars")
-    request = Net::HTTP::Get.new(url.path)
+api_results = InterviewProject::SimpleAPIClient.new.make_request
 
-    response = Net::HTTP.start(url.host, url.port) { |http| http.request(request) }
+puts "Processing cars...\n\n"
+api_results.each { |car| interview_sql_client.process_car(car) }
+puts "Finished processing cars\n\n"
 
-    JSON.parse response.body
-  end
-end
+puts "Displaying tables\n\n"
+interview_sql_client.display_tables
 
-results = SimpleAPIClient.new.make_request
-
-module SQLWrapper
-  DB = Sequel.connect('postgres://postgres@localhost/testdb')
-end
-
-# dependency order. There's probably a better way to drop and create tables than maintaining this order.
-TABLES = [
-  {
-    name: 'manufacturers',
-    columns: [
-      'manufacturer_name text PRIMARY KEY',
-      'country text'
-    ]
-  },
-  {
-    name: 'colors',
-    columns: [
-      'color_name text PRIMARY KEY'
-    ]
-  },
-  {
-    name: 'cars',
-    columns: [
-      'car_model text PRIMARY KEY',
-      'type text NOT NULL',
-      'manufacturer_name text REFERENCES manufacturers (manufacturer_name)'
-    ]
-  },
-  {
-    name: 'cars_colors',
-    columns: [
-      'car_model text REFERENCES cars (car_model)',
-      'color_name text REFERENCES colors (color_name)'
-    ]
-  }
-]
-
-def insert_manufacturer(manufacturer)
-  SQLWrapper::DB.run(
-    "INSERT INTO manufacturers (manufacturer_name, country) VALUES\n" \
-    "('#{manufacturer['name']}', '#{manufacturer['country']}');"
-  )
-rescue Sequel::DatabaseError => e
-  raise e unless e.message =~ /Key \(manufacturer_name\)=\(\S+\) already exists/
-
-  puts "#{manufacturer['name']} already exists."
-end
-
-def insert_car(car)
-  SQLWrapper::DB.run(
-    "INSERT INTO cars (car_model, type, manufacturer_name) VALUES\n" \
-    "('#{car['model']}', '#{car['type']}', '#{car['manufacturer']['name']}');"
-  )
-end
-
-def insert_color(color)
-  SQLWrapper::DB.run(
-    "INSERT INTO colors (color_name) VALUES\n" \
-    "('#{color}');"
-  )
-rescue Sequel::DatabaseError => e
-  raise e unless e.message =~ /Key \(color_name\)=\(\S+\) already exists/
-
-  puts "#{color} already exists."
-end
-
-def insert_cars_colors(car_model, colors)
-  colors.each do |color|
-    SQLWrapper::DB.run(
-      "INSERT INTO cars_colors (car_model, color_name) VALUES\n" \
-      "('#{car_model}', '#{color}');"
-    )
-  end
-end
-
-def process_car(car)
-  insert_manufacturer(car['manufacturer'])
-  insert_car(car)
-
-  car['available_colors'].each do |color|
-    insert_color(color)
-  end
-
-  insert_cars_colors(car['model'], car['available_colors'])
-end
-
-def drop_tables
-  TABLES.reverse_each do |table|
-    begin
-      SQLWrapper::DB.run("DROP TABLE #{table[:name]} CASCADE")
-    rescue Sequel::DatabaseError => _e
-      puts "Can't drop #{table[:name]}"
-    end
-  end
-end
-
-def create_tables
-  TABLES.each do |table|
-    SQLWrapper::DB.run("CREATE TABLE #{table[:name]} (\n#{table[:columns].join(",\n")}\n);")
-  end
-end
-
-def make_answers
-  query = "SELECT (m.manufacturer_name, count(color_name)) FROM\n" \
-            "cars c JOIN manufacturers m ON c.manufacturer_name=m.manufacturer_name\n" \
-            "JOIN cars_colors ON c.car_model=cars_colors.car_model WHERE cars_colors.color_name='blue'\n" \
-            'GROUP BY m.manufacturer_name'
-
-  SQLWrapper::DB[query].each do |row|
-    puts row
-  end
-end
-
-drop_tables
-create_tables
-
-results.each { |car| process_car(car) }
-
-make_answers
+interview_sql_client.show_color_count
