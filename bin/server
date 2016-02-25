@@ -5,7 +5,7 @@ require 'sinatra/json'
 require_relative 'setup_req'
 require 'interview_project'
 
-cars = default_cars
+cars = InterviewProject.default_cars
 
 get '/api/cars' do
   json cars

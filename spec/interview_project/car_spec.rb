@@ -18,11 +18,15 @@ describe InterviewProject::Car do
 
   describe '.new' do
     it 'constructs a car object with valid hash input' do
-      expect(InterviewProject::Car.new(valid_hash)).to be_an_instance_of InterviewProject::Car
+      expect(InterviewProject::Car.new(valid_hash)).to(
+        be_an_instance_of(InterviewProject::Car)
+      )
     end
 
     it "fails to construct a car with missing 'type' in hash input" do
-      expect { InterviewProject::Car.new(invalid_hash) }.to raise_error(/key not found: "type"/)
+      expect { InterviewProject::Car.new(invalid_hash) }.to(
+        raise_error(/key not found: "type"/)
+      )
     end
   end
 end
