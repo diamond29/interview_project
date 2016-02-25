@@ -1,7 +1,7 @@
 # interview_project
 [![Build Status](https://travis-ci.org/diamond29/interview_project.svg?branch=master)](https://travis-ci.org/diamond29/interview_project)
 
-A little project for an interview. Set up a webserver that sends some information to a client, client stores some information in a relational database and prints output.
+A little project for an interview. Set up a webserver that sends some information to a client, client stores some information in a postgresql relational database and prints output.
 
 Requires
 
@@ -18,8 +18,12 @@ bin/create_db
 # install ruby gems
 bundle install
 
-# To run the web server:
+# run rspec tests and rubocop
+bundle exec rake
+
+# run the web server:
 bundle exec bin/server
 
-# To run the client:
+# run the client:
 bundle exec bin/client
+```
