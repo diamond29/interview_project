@@ -20,10 +20,10 @@ module InterviewProject
 
     def to_hash
       {
-        model: model,
-        type: type,
-        manufacturer: manufacturer.to_hash,
-        available_colors: available_colors
+        'model' => model,
+        'type' => type,
+        'manufacturer' => manufacturer.to_hash,
+        'available_colors' => available_colors
       }
     end
 

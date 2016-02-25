@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -e
 
-psql -c 'create database testdb;' -U postgres -h localhost
+psql -c 'create database interviewproject;' -U postgres -h localhost

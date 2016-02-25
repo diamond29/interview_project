@@ -10,7 +10,7 @@ api_results = InterviewProject::SimpleAPIClient.new.make_request
 
 puts "Processing cars...\n\n"
 api_results.each { |car| interview_sql_client.process_car(car) }
-puts "Finished processing cars\n\n"
+puts "\nFinished processing cars\n\n"
 
 puts "Displaying tables\n\n"
 interview_sql_client.display_tables

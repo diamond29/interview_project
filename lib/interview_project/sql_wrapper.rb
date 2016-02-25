@@ -4,7 +4,7 @@ require 'table_print'
 module InterviewProject
   # Wrap all sql interactions in this class
   class SQLWrapper
-    DB = Sequel.connect('postgres://postgres@localhost/testdb')
+    DB = Sequel.connect('postgres://postgres@localhost/interviewproject')
 
     COLOR_COUNT_QUERY = "SELECT (m.manufacturer_name, count(color_name)) FROM\n" \
         "  cars c JOIN manufacturers m ON c.manufacturer_name=m.manufacturer_name\n" \

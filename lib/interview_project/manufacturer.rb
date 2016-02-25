@@ -13,8 +13,8 @@ module InterviewProject
 
     def to_hash
       {
-        name: name,
-        country: country
+        'name' => name,
+        'country' => country
       }
     end
 
